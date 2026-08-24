@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>段欣然｜Agentic Multimodal Intelligence</title>
+  <style>
+    :root{
+      --ink:#0b2235;--muted:#607283;--blue:#0878a8;--cyan:#16a6a1;
+      --amber:#ee9c32;--coral:#ef6c57;--paper:#f7fafb;--line:#cfdae0;
+      --mx:50%;--my:50%;--ease:cubic-bezier(.2,.75,.2,1)
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-snap-type:y mandatory}
+    body{margin:0;background:#06131e;color:var(--ink);font-family:Inter,"PingFang SC","Microsoft YaHei",Arial,sans-serif;overflow-x:hidden}
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:20;background:radial-gradient(420px circle at var(--mx) var(--my),rgba(43,194,210,.06),transparent 62%)}
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
+    .slide{min-height:100vh;scroll-snap-align:start;display:grid;place-items:center;position:relative;padding:4vh 3vw;background:linear-gradient(135deg,#f9fbfc,#eef4f6)}
+    .slide:nth-child(odd){background:linear-gradient(135deg,#fbfcfd,#f1f6f7)}
+    .slide::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.45;background-image:linear-gradient(rgba(8,120,168,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(8,120,168,.035) 1px,transparent 1px);background-size:32px 32px}
+    .canvas{width:min(94vw,calc(88vh * 16 / 9),1600px);aspect-ratio:16/9;position:relative;z-index:1;background:rgba(255,255,255,.92);border:1px solid rgba(143,169,182,.55);border-radius:24px;padding:clamp(30px,4vw,68px);overflow:hidden;box-shadow:0 30px 80px rgba(1,24,38,.22);display:flex;flex-direction:column}
+    .dark .canvas{color:white;background:radial-gradient(circle at 72% 28%,#123f59 0,#092537 38%,#061825 76%);border-color:#24495d}
+    .eyebrow{font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);font-size:clamp(13px,1vw,18px)}
+    .dark .eyebrow{color:#7de0db}
+    h1{font-size:clamp(50px,5vw,84px);line-height:1.03;letter-spacing:-.055em;margin:18px 0 22px;max-width:1050px}
+    h2{font-size:clamp(34px,3.2vw,58px);line-height:1.08;letter-spacing:-.035em;margin:8px 0 20px}
+    h3{font-size:clamp(20px,1.55vw,30px);margin:0 0 10px}
+    p{font-size:clamp(16px,1.18vw,22px);line-height:1.55;margin:0;color:#31495b}
+    .dark p{color:#c7d9e3}
+    .lead{font-size:clamp(21px,1.65vw,30px);max-width:1020px;color:#36566b}
+    .dark .lead{color:#cae0e9}
+    .accent{color:var(--blue)} .dark .accent{color:#66ded7}
+    .orange{color:#d97b18}.coral{color:var(--coral)}
+    .rule{height:2px;background:linear-gradient(90deg,var(--blue),rgba(8,120,168,0));margin:12px 0 26px}
+    .topline{display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .counter{font:700 14px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;color:#7a8c99;letter-spacing:.08em}
+    .dark .counter{color:#7f9bad}
+    .tag{display:inline-block;border:1px solid #a5bcc8;border-radius:999px;padding:7px 13px;font-size:14px;font-weight:750;color:#315469;margin:4px 6px 4px 0;background:rgba(255,255,255,.7)}
+    .dark .tag{color:#cae6ed;border-color:#456a7e;background:rgba(255,255,255,.04)}
+    .title-layout{display:grid;grid-template-columns:1fr 300px;gap:70px;align-items:center;flex:1}
+    .portrait{width:220px;height:280px;object-fit:cover;border-radius:26px;justify-self:center;border:1px solid #5b8295;box-shadow:24px 24px 0 rgba(20,169,164,.16);filter:saturate(.92)}
+    .identity-links{display:flex;gap:16px;flex-wrap:wrap;margin-top:32px}
+    .link{border-bottom:1px solid currentColor;padding-bottom:3px;font-weight:700;color:var(--blue);transition:.25s var(--ease)}
+    .link:hover{color:var(--coral);transform:translateY(-2px)}
+    .dark .link{color:#8de5df}
+    .thesis{font-size:clamp(17px,1.35vw,25px);line-height:1.55;color:#b9d0dc;margin-top:20px;max-width:920px}
+    .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;align-items:stretch;flex:1;margin-top:28px}
+    .phase{position:relative;padding:28px 8px 18px;border-top:4px solid var(--blue);transition:.32s var(--ease)}
+    .phase:nth-child(2){border-color:var(--cyan)}.phase:nth-child(3){border-color:var(--amber)}.phase:nth-child(4){border-color:var(--coral)}
+    .phase:not(:last-child)::after{content:"→";position:absolute;right:-25px;top:42%;font-size:28px;color:#90a8b4}
+    .phase-index{font:800 clamp(36px,4vw,70px)/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:#dbe7ec;transition:.32s}
+    .phase p{font-size:clamp(14px,1.02vw,19px)}
+    .phase .detail{opacity:0;transform:translateY(8px);max-height:0;overflow:hidden;color:var(--blue);font-weight:750;transition:.32s var(--ease)}
+    .phase:hover{transform:translateY(-10px)}.phase:hover .phase-index{color:var(--blue)}.phase:hover .detail{opacity:1;max-height:80px;transform:none;margin-top:12px}
+    .two-col{display:grid;grid-template-columns:.82fr 1.18fr;gap:54px;align-items:center;flex:1;min-height:0}
+    .two-col.visual-left{grid-template-columns:1.2fr .8fr}
+    .challenge-list{display:grid;gap:18px;margin-top:25px}
+    .challenge{padding:16px 0;border-bottom:1px solid var(--line);transition:.25s}
+    .challenge:hover{padding-left:14px;border-color:var(--blue);color:var(--blue)}
+    .challenge strong{font-size:clamp(17px,1.25vw,23px);display:block;margin-bottom:4px}
+    .challenge span{font-size:clamp(14px,1vw,18px);color:var(--muted)}
+    .metric-row{display:flex;gap:18px;flex-wrap:wrap;margin-top:24px}
+    .metric{min-width:145px;padding:15px 18px;border-left:4px solid var(--blue);background:#edf5f7;transition:.28s var(--ease)}
+    .metric:hover{transform:translateY(-6px);background:#e4f4f3;border-color:var(--coral)}
+    .metric b{display:block;font-size:clamp(25px,2.2vw,40px);letter-spacing:-.04em}
+    .metric span{font-size:13px;color:#647984}
+    .figure-wrap{position:relative;min-height:0;cursor:zoom-in;border-radius:18px;overflow:hidden;background:white;border:1px solid #d9e2e7;box-shadow:0 18px 40px rgba(24,63,83,.1);transition:.35s var(--ease)}
+    .figure-wrap:hover{transform:translateY(-6px);box-shadow:0 28px 55px rgba(24,63,83,.2)}
+    .figure-wrap img{display:block;width:100%;height:100%;object-fit:contain;transition:.45s var(--ease)}
+    .figure-wrap:hover img{transform:scale(1.018)}
+    .figure-caption{font-size:13px;color:#667d89;margin-top:9px}
+    .hotspot{position:absolute;border:2px solid transparent;border-radius:14px;transition:.25s;background:transparent}
+    .hotspot::after{content:attr(data-label);position:absolute;left:10px;bottom:10px;color:white;background:rgba(7,33,50,.9);padding:8px 11px;border-radius:8px;font-size:13px;font-weight:750;opacity:0;transform:translateY(5px);transition:.25s;white-space:nowrap}
+    .hotspot:hover{border-color:var(--coral);background:rgba(239,108,87,.08)}.hotspot:hover::after{opacity:1;transform:none}
+    .fig-wide{flex:1;min-height:0;display:grid;grid-template-rows:1fr auto}
+    .fig-wide .figure-wrap{height:100%}
+    .callout-strip{display:flex;align-items:center;justify-content:space-between;gap:28px;margin-top:18px;padding-top:17px;border-top:1px solid var(--line)}
+    .claim{font-size:clamp(16px,1.18vw,22px);font-weight:700;color:#29485a}
+    .claim em{font-style:normal;color:var(--coral)}
+    .role-note{border-left:4px solid var(--amber);padding:13px 18px;background:#fff6e8;font-size:clamp(14px,1vw,18px);line-height:1.45}
+    .paper-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:54px;flex:1;align-items:center}
+    .paper-list{display:grid;gap:0}
+    .paper{display:grid;grid-template-columns:130px 1fr;gap:20px;padding:15px 0;border-bottom:1px solid var(--line);transition:.26s var(--ease)}
+    .paper:hover{transform:translateX(10px);border-color:var(--blue)}
+    .venue{font-weight:850;color:var(--blue)}
+    .paper-title{font-weight:760;font-size:clamp(15px,1.05vw,19px)}
+    .paper small{color:var(--muted);display:block;margin-top:5px;line-height:1.4}
+    .synthesis{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:35px}
+    .syn{min-height:240px;padding:24px;border:1px solid #b9cad3;border-radius:18px;position:relative;overflow:hidden;transition:.3s var(--ease);background:rgba(255,255,255,.45)}
+    .syn::before{content:"";position:absolute;left:0;top:0;width:100%;height:6px;background:var(--blue)}
+    .syn:nth-child(2)::before{background:var(--cyan)}.syn:nth-child(3)::before{background:var(--amber)}.syn:nth-child(4)::before{background:var(--coral)}
+    .syn:hover{transform:translateY(-9px);background:white;box-shadow:0 18px 36px rgba(14,58,81,.14)}
+    .syn b{display:block;font:850 clamp(23px,1.8vw,34px)/1.12 ui-sans-serif,system-ui;margin-bottom:18px}
+    .syn p{font-size:clamp(14px,1vw,18px)}
+    .syn .project{position:absolute;left:24px;bottom:22px;font-size:13px;font-weight:800;color:#718692}
+    .footer{margin-top:auto;padding-top:14px;display:flex;justify-content:space-between;align-items:end;font-size:12px;color:#71828d}
+    .footer a{text-decoration:underline;text-underline-offset:3px}
+    .nav{position:fixed;z-index:50;right:22px;top:50%;transform:translateY(-50%);display:grid;gap:9px;padding:12px 9px;border-radius:999px;background:rgba(4,20,31,.72);backdrop-filter:blur(10px)}
+    .nav a{width:9px;height:9px;border-radius:50%;background:#67808d;transition:.25s;position:relative}
+    .nav a:hover,.nav a.active{background:#5be0d7;transform:scale(1.45)}
+    .nav a::before{content:attr(aria-label);position:absolute;right:20px;top:50%;transform:translateY(-50%);white-space:nowrap;background:#092638;color:white;padding:5px 8px;border-radius:6px;font-size:11px;opacity:0;pointer-events:none;transition:.2s}
+    .nav a:hover::before{opacity:1}
+    .controls{position:fixed;z-index:60;right:20px;top:18px;display:flex;gap:8px}
+    .controls button{border:1px solid rgba(163,190,204,.45);background:rgba(4,20,31,.78);color:#d7e9f0;border-radius:999px;padding:8px 12px;cursor:pointer;backdrop-filter:blur(10px)}
+    .controls button:hover{color:#64e2db;border-color:#64e2db}
+    .progress{position:fixed;z-index:55;left:0;top:0;height:4px;background:linear-gradient(90deg,var(--blue),#56dfd7);width:0;transition:width .2s}
+    .modal{position:fixed;z-index:100;inset:0;background:rgba(2,13,21,.93);display:none;place-items:center;padding:3vw;cursor:zoom-out}
+    .modal.open{display:grid}.modal img{max-width:95vw;max-height:91vh;object-fit:contain;background:white;border-radius:12px;box-shadow:0 30px 100px #000}
+    .hint{position:absolute;right:34px;bottom:26px;color:#8fa4af;font-size:12px;letter-spacing:.04em}
+    @media(max-width:900px){.canvas{width:96vw;min-height:88vh;height:auto;aspect-ratio:auto;overflow:auto;padding:28px}.title-layout,.two-col,.two-col.visual-left,.paper-grid{grid-template-columns:1fr}.portrait{display:none}.flow,.synthesis{grid-template-columns:1fr 1fr}.phase:not(:last-child)::after{display:none}.nav{display:none}.figure-wrap{min-height:260px}.paper{grid-template-columns:95px 1fr}.slide{padding:2vh 2vw}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress"></div>
+  <div class="controls"><button id="overviewBtn" title="显示全部页面">总览</button><button id="fullBtn" title="进入全屏">全屏</button></div>
+  <nav class="nav" id="nav" aria-label="幻灯片导航"></nav>
+
+  <section class="slide dark" id="s1" data-title="开场">
+    <div class="canvas">
+      <div class="topline"><div class="eyebrow">Agentic Multimodal Intelligence</div><div class="counter">01 / 10</div></div>
+      <div class="title-layout">
+        <div>
+          <h1>让多模态信息<br><span class="accent">可理解 · 可组织 · 可行动</span></h1>
+          <p class="lead">段欣然｜多模态大模型 · Agentic AI · 后训练与模型安全</p>
+          <p class="thesis">围绕真实业务中的长程理解、知识结构化、训练效率与动态安全策略，构建能够自动感知、组织、学习并适应规则的 Agent 系统。</p>
+          <div class="identity-links">
+            <a class="link" href="https://kong-johnny.github.io/" target="_blank">个人主页 ↗</a>
+            <a class="link" href="https://github.com/kong-johnny" target="_blank">GitHub ↗</a>
+            <a class="link" href="https://scholar.google.com/citations?user=OOxa6MAAAAAJ&hl=en" target="_blank">Google Scholar ↗</a>
+          </div>
+        </div>
+        <img class="portrait" src="assets/sunglasses_avatar.jpg" alt="段欣然戴墨镜的户外头像" />
+      </div>
+      <div class="hint">方向键 / 滚轮翻页 · 悬浮查看细节</div>
+    </div>
+  </section>
+
+  <section class="slide" id="s2" data-title="研究主线">
+    <div class="canvas">
+      <div class="topline"><div class="eyebrow">Research Throughline</div><div class="counter">02 / 10</div></div>
+      <h2>四段经历，解决同一条 Agent 链路上的四个瓶颈</h2>
+      <p class="lead">从原始多模态世界出发，把信息转化为结构，再让模型高效学习，最终在变化的业务规则下可靠行动。</p>
+      <div class="flow">
+        <article class="phase"><div class="phase-index">01</div><h3>理解</h3><p>长视频不只是“发生了什么”，还要理解跨章节情节与时间边界。</p><div class="detail">快手 · CausalChapter</div></article>
+        <article class="phase"><div class="phase-index">02</div><h3>组织</h3><p>把论文与书籍从线性文本转化为由抽象到具体的知识结构。</p><div class="detail">面壁 · 知识结构化 Agent</div></article>
+        <article class="phase"><div class="phase-index">03</div><h3>学习</h3><p>识别同域数据内部异质性，让训练样本以更一致的结构参与迭代。</p><div class="detail">字节 · 自动分群训练</div></article>
+        <article class="phase"><div class="phase-index">04</div><h3>适应</h3><p>把审核规则作为运行时输入，让同一内容在不同策略下得到正确判断。</p><div class="detail">蚂蚁 · SingGuard</div></article>
+      </div>
+      <div class="footer"><span>核心能力：多模态建模 × Agent 工作流 × 数据闭环 × 业务落地</span><span>Hover each stage</span></div>
+    </div>
+  </section>
+
+  <section class="slide" id="s3" data-title="快手：问题">
+    <div class="canvas">
+      <div class="topline"><div class="eyebrow">Kuaishou · Problem</div><div class="counter">03 / 10</div></div>
+      <div class="two-col">
+        <div>
+          <h2>热点挖掘之前，先让模型真正“看懂”一部长短剧</h2>
+          <p>传统 DVC 多停留在“谁在何处做什么”的局部事件层；业务真正需要的是带时间定位、情节完整、跨段一致的高层剧情单元。</p>
+          <div class="challenge-list">
+            <div class="challenge"><strong>边界不明显</strong><span>镜头和词汇仍然连贯，但剧情阶段已经切换。</span></div>
+            <div class="challenge"><strong>长程依赖被截断</strong><span>后续情节依赖前文设定、人物关系与因果线索。</span></div>
+            <div class="challenge"><strong>输出必须可落地</strong><span>精确到时间区间，并为热点把控与预测提供结构化底座。</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="role-note"><b>我的任务</b>：把长程多模态视频转化为时间定位的高层剧情描述，并保持章节间语义一致性。</div>
+          <div class="metric-row">
+            <div class="metric"><b>EMNLP 2026</b><span>主会 · 第一作者</span></div>
+            <div class="metric"><b>Top 15%</b><span>评审成绩区间</span></div>
+          </div>
+          <p style="margin-top:26px">这一问题自然引出两个关键判断：<b>哪里发生了真正的章节转折？哪些历史片段对当前描述真的有用？</b></p>
+        </div>
+      </div>
+      <div class="footer"><a href="assets/CausalChapter_EMNLP2026.pdf" target="_blank">打开 CausalChapter 论文 ↗</a><span>业务场景：短剧热点挖掘</span></div>
+    </div>
+  </section>
+
+  <section class="slide" id="s4" data-title="CausalChapter">
+    <div class="canvas">
+      <div class="topline"><div class="eyebrow">CausalChapter · Method</div><div class="counter">04 / 10</div></div>
+      <h2>用“干预后的预测变化”衡量真正有用的时序依赖</h2>
+      <div class="fig-wide">
+        <div class="figure-wrap" data-zoom>
+          <img src="assets/causalchapter-overview.png" alt="CausalChapter 方法总览图" />
+          <div class="hotspot" data-label="LCDS：依赖骤降定位平滑转折" style="left:0.5%;top:45%;width:41%;height:52%"></div>
+          <div class="hotspot" data-label="CSSE：移除干预筛选关键历史上下文" style="left:43%;top:45%;width:43%;height:52%"></div>
+        </div>
+        <div class="callout-strip">
+          <div class="claim">LCDS 找边界，CSSE 保上下文：<em>从表面相似转向预测支持</em></div>
+          <div class="metric-row" style="margin:0"><div class="metric"><b>95.36 → 116.88</b><span>同 Qwen 骨干，CIDEr +21.52</span></div></div>
+        </div>
+      </div>
+      <div class="footer"><a href="assets/CausalChapter_EMNLP2026.pdf" target="_blank">CausalChapter · EMNLP 2026 Main ↗</a><span>点击主图放大</span></div>
+    </div>
+  </section>
+
+  <section class="slide" id="s5" data-title="面壁：知识 Agent">
+    <div class="canvas">
+      <div class="topline"><div class="eyebrow">ModelBest · AI4Science Agent</div><div class="counter">05 / 10</div></div>
+      <h2>比“检索一段文本”更进一步：让知识本身具有层次结构</h2>
+      <div class="two-col visual-left">
+        <div class="figure-wrap" data-zoom><img src="assets/modelbest-knowledge-tree.png" alt="知识结构化 Agent 生成示意图" /></div>
+        <div>
+          <p>面向清小搭的科研知识检索与整合场景，将医学、化学等论文与书籍递归组织为知识树。</p>
+          <div class="challenge-list">
+            <div class="challenge"><strong>自底向上聚合</strong><span>从原子信息逐层归并，为子节点自动抽象标题与父级概念。</span></div>
+            <div class="challenge"><strong>自顶向下扩展</strong><span>接受用户 Outline，沿既定框架补充节点并持续丰富整棵树。</span></div>
+            <div class="challenge"><strong>人机共同可读</strong><span>结构便于人快速浏览，也便于 Agent 检索、融合与继续推理。</span></div>
+          </div>
+          <div class="metric-row"><div class="metric"><b>≈ +6 pt</b><span>相较基模 + Vanilla RAG，开源数据平均提升</span></div></div>
+        </div>
+      </div>
+      <div class="footer"><span>主图为依据本人项目描述生成的论文风格示意图，不代表已发表论文图</span><span>2025.05–2025.10</span></div>
+    </div>
+  </section>
+
+  <section class="slide" id="s6" data-title="字节：训练闭环">
+    <div class="canvas">
+      <div class="topline"><div class="eyebrow">ByteDance CQC · Training Loop</div><div class="counter">06 / 10</div></div>
+      <h2>训练退化不是数据不够，而是同一风险域内部仍然高度异质</h2>
+      <div class="two-col visual-left">
+        <div class="figure-wrap" data-zoom><img src="assets/bytedance-auto-cluster.png" alt="多模态自动聚类与分群训练流程生成示意图" /></div>
+        <div>
+          <p>原链路已有大盘取数、特征提取、CoT 生成、评测与迭代；我定位到混合类型训练造成的版本退化，并补齐自动聚类、分群训练与闭环接入。</p>
+          <div class="metric-row">
+            <div class="metric"><b>+4 pt</b><span>负责风险域模型效果</span></div>
+            <div class="metric"><b>0 人工分群</b><span>全流程自动迭代</span></div>
+          </div>
+          <div class="role-note" style="margin-top:24px"><b>关键判断</b>：风险标签相同，不代表音视频分布相同；先形成内部一致的样本群，再训练，模型才能稳定吸收监督信号。</div>
+        </div>
+      </div>
+      <div class="footer"><span>主图为依据本人项目描述生成的论文风格示意图，不代表内部文档</span><span>2025.10–2025.12</span></div>
+    </div>
+  </section>
+
+  <section class="slide" id="s7" data-title="蚂蚁：策略适应">
+    <div class="canvas">
+      <div class="topline"><div class="eyebrow">Ant Group · SingGuard</div><div class="counter">07 / 10</div></div>
+      <div class="two-col">
+        <div>
+          <h2>安全边界会随业务、地域与产品阶段变化</h2>
+          <p>固定 taxonomy 容易让模型记住训练期标签，而不是理解部署时真正生效的规则。SingGuard 把 active policy 作为运行时输入，在多模态内容上逐条匹配规则。</p>
+          <div class="challenge-list">
+            <div class="challenge"><strong>同一内容，规则不同，结论也应不同</strong><span>策略不再是训练时写死的类别，而是可增删、改写、合并与调整边界的输入。</span></div>
+            <div class="challenge"><strong>简单样本快速判断，复杂样本深入推理</strong><span>从 fast 到 slow 的动态推理路径兼顾吞吐、解释性与边界案例。</span></div>
+          </div>
+        </div>
+        <div class="figure-wrap" data-zoom style="height:62%"><img src="assets/singguard-overview.png" alt="SingGuard 策略自适应与动态推理总览图" /><div class="hotspot" data-label="Active Policy：规则可在运行时调整" style="left:31%;top:34%;width:28%;height:50%"></div><div class="hotspot" data-label="Dynamic Reasoning：按风险选择推理深度" style="left:59%;top:34%;width:36%;height:50%"></div></div>
+      </div>
+      <div class="footer"><a href="assets/SingGuard_Technical_Report.pdf" target="_blank">打开 SingGuard 技术报告 ↗</a><a href="https://arxiv.org/abs/2606.22873" target="_blank">arXiv ↗</a></div>
+    </div>
+  </section>
+
+  <section class="slide" id="s8" data-title="动态规则 Agent">
+    <div class="canvas">
+      <div class="topline"><div class="eyebrow">Dynamic Rule Agent · Contribution</div><div class="counter">08 / 10</div></div>
+      <h2>我的工作：自动构造“策略改变 → 标签随之改变”的训练闭环</h2>
+      <div class="two-col visual-left">
+        <div class="figure-wrap" data-zoom><img src="assets/singguard-dynamic-pipeline.png" alt="SingGuard 策略条件数据构建与训练流程" /></div>
+        <div>
+          <div class="challenge-list">
+            <div class="challenge"><strong>规则视角多样化</strong><span>完整规则、子集规则、单条规则、合并/改写规则与新领域规则。</span></div>
+            <div class="challenge"><strong>Teacher–Verifier 数据闭环</strong><span>根据当前策略重算标签，过滤语义或判定不一致样本。</span></div>
+            <div class="challenge"><strong>策略语义而非类别捷径</strong><span>迫使模型依据运行时规则判断，而非复用固定 taxonomy 先验。</span></div>
+          </div>
+          <div class="metric-row">
+            <div class="metric"><b>74.15%</b><span>动态策略准确率</span></div>
+            <div class="metric"><b>+9.5 pp</b><span>较 Qwen3-VL-8B</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><a href="https://github.com/inclusionAI/Sing-Guard" target="_blank">SingGuard Code ↗</a><span>技术报告 Figure 3</span></div>
+    </div>
+  </section>
+
+  <section class="slide" id="s9" data-title="研究组合">
+    <div class="canvas">
+      <div class="topline"><div class="eyebrow">Research Portfolio</div><div class="counter">09 / 10</div></div>
+      <div class="paper-grid">
+        <div>
+          <h2>研究问题在变，方法论始终一致</h2>
+          <p class="lead">寻找系统真正失败的机制，再用结构、干预或自反馈替代脆弱的表面相关性。</p>
+          <div class="metric-row">
+            <div class="metric"><b>EMNLP</b><span>长视频章节理解</span></div>
+            <div class="metric"><b>ICLR</b><span>任务协同与动作分割</span></div>
+            <div class="metric"><b>CCF-A</b><span>视听事件感知 · 投稿中</span></div>
+          </div>
+        </div>
+        <div class="paper-list">
+          <a class="paper" href="assets/CausalChapter_EMNLP2026.pdf" target="_blank"><span class="venue">EMNLP 2026</span><span class="paper-title">CausalChapter<small>第一作者 · 长视频多模态理解</small></span></a>
+          <a class="paper" href="https://openreview.net/forum?id=Vgh30npuN3" target="_blank"><span class="venue">ICLR 2026</span><span class="paper-title">Curvature-Guided Task Synergy<small>学生一作 · 骨骼动作分割</small></span></a>
+          <div class="paper"><span class="venue">CCF-A 投稿中</span><span class="paper-title">Self-Purifying Caching<small>学生一作 · 无需训练的视听事件感知</small></span></div>
+          <a class="paper" href="https://kong-johnny.github.io/files/RemapVR.pdf" target="_blank"><span class="venue">CHI 2025</span><span class="paper-title">RemapVR<small>沉浸式交互创作</small></span></a>
+          <a class="paper" href="https://kong-johnny.github.io/files/ST-4DGS.pdf" target="_blank"><span class="venue">SIGGRAPH 2024</span><span class="paper-title">ST-4DGS<small>时空一致的 4D Gaussian Splatting</small></span></a>
+          <a class="paper" href="https://www.jsjkx.com/CN/10.11896/jsjkx.240400109" target="_blank"><span class="venue">计算机科学 · CCF-B</span><span class="paper-title">基于视频理解的教学过程感知与分析</span></a>
+        </div>
+      </div>
+      <div class="footer"><a href="https://scholar.google.com/citations?user=OOxa6MAAAAAJ&hl=en" target="_blank">完整论文列表 ↗</a><span>Hover / Click to open</span></div>
+    </div>
+  </section>
+
+  <section class="slide dark" id="s10" data-title="总结">
+    <div class="canvas">
+      <div class="topline"><div class="eyebrow">One Consistent Direction</div><div class="counter">10 / 10</div></div>
+      <h2>我希望构建的 Agent，不只会回答问题，而是能理解环境、组织证据并适应目标</h2>
+      <div class="synthesis">
+        <article class="syn"><b>Understand</b><p>从长程多模态输入中恢复时间结构与高层语义。</p><span class="project">CausalChapter</span></article>
+        <article class="syn"><b>Structure</b><p>将分散信息组织为可递归扩展、可供人机共同读取的知识树。</p><span class="project">AI4Science Agent</span></article>
+        <article class="syn"><b>Learn</b><p>发现训练数据内部结构，用自动分群与反馈闭环提高学习效率。</p><span class="project">CQC Training Loop</span></article>
+        <article class="syn"><b>Adapt</b><p>让模型依据运行时策略行动，并在复杂边界上进行可验证推理。</p><span class="project">SingGuard</span></article>
+      </div>
+      <div style="display:flex;align-items:end;justify-content:space-between;margin-top:auto">
+        <div><div class="tag">北京师范大学 · 计算机硕士</div><div class="tag">GPA 4.0 / 4.0 · 1 / 71</div><div class="tag">多模态 / Agent / 后训练</div></div>
+        <div style="text-align:right"><p style="font-weight:800;color:white">段欣然</p><span style="color:#8de5df">Agentic Multimodal Intelligence</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal" id="modal" aria-label="图片放大预览"><img id="modalImg" alt="放大后的项目主图" /></div>
+  <script>
+    const slides=[...document.querySelectorAll('.slide')],nav=document.getElementById('nav'),progress=document.getElementById('progress');
+    slides.forEach((s,i)=>{const a=document.createElement('a');a.href='#'+s.id;a.setAttribute('aria-label',s.dataset.title);nav.appendChild(a)});
+    const dots=[...nav.children];
+    const update=()=>{let best=0,dist=Infinity;slides.forEach((s,i)=>{const d=Math.abs(s.getBoundingClientRect().top);if(d<dist){dist=d;best=i}});dots.forEach((d,i)=>d.classList.toggle('active',i===best));progress.style.width=((best+1)/slides.length*100)+'%'};
+    addEventListener('scroll',update,{passive:true});update();
+    addEventListener('mousemove',e=>{document.documentElement.style.setProperty('--mx',e.clientX+'px');document.documentElement.style.setProperty('--my',e.clientY+'px')},{passive:true});
+    addEventListener('keydown',e=>{const current=dots.findIndex(d=>d.classList.contains('active'));if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();slides[Math.min(slides.length-1,current+1)].scrollIntoView()}if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();slides[Math.max(0,current-1)].scrollIntoView()}if(e.key==='Escape')document.getElementById('modal').classList.remove('open')});
+    document.getElementById('fullBtn').onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
+    document.getElementById('overviewBtn').onclick=()=>document.body.classList.toggle('overview');
+    const style=document.createElement('style');style.textContent='.overview .slide{min-height:auto;padding:22px}.overview .canvas{width:min(46vw,760px);height:auto;aspect-ratio:16/9;transform:none}.overview{display:grid;grid-template-columns:1fr 1fr;gap:0}.overview .nav{display:none}@media(max-width:900px){.overview{grid-template-columns:1fr}.overview .canvas{width:94vw}}';document.head.appendChild(style);
+    const modal=document.getElementById('modal'),modalImg=document.getElementById('modalImg');document.querySelectorAll('[data-zoom]').forEach(w=>w.addEventListener('click',e=>{if(e.target.classList.contains('hotspot'))return;modalImg.src=w.querySelector('img').src;modal.classList.add('open')}));modal.onclick=()=>modal.classList.remove('open');
+  </script>
+</body>
+</html>
