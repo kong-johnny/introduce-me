@@ -119,7 +119,7 @@
 
   <section class="slide dark" id="s1" data-title="开场">
     <div class="canvas">
-      <div class="topline"><div class="eyebrow">Agentic Multimodal Intelligence</div><div class="counter">01 / 10</div></div>
+      <div class="topline"><div class="eyebrow">Agentic Multimodal Intelligence</div><div class="counter">01 / 11</div></div>
       <div class="title-layout">
         <div>
           <h1>让多模态信息<br><span class="accent">可理解 · 可组织 · 可行动</span></h1>
@@ -139,7 +139,7 @@
 
   <section class="slide" id="s2" data-title="研究主线">
     <div class="canvas">
-      <div class="topline"><div class="eyebrow">Research Throughline</div><div class="counter">02 / 10</div></div>
+      <div class="topline"><div class="eyebrow">Research Throughline</div><div class="counter">02 / 11</div></div>
       <h2>四段经历，解决同一条 Agent 链路上的四个瓶颈</h2>
       <p class="lead">从原始多模态世界出发，把信息转化为结构，再让模型高效学习，最终在变化的业务规则下可靠行动。</p>
       <div class="flow">
@@ -154,7 +154,7 @@
 
   <section class="slide" id="s3" data-title="快手：问题">
     <div class="canvas">
-      <div class="topline"><div class="eyebrow">Kuaishou · Problem</div><div class="counter">03 / 10</div></div>
+      <div class="topline"><div class="eyebrow">Kuaishou · Problem</div><div class="counter">03 / 11</div></div>
       <div class="two-col">
         <div>
           <h2>热点挖掘之前，先让模型真正“看懂”一部长短剧</h2>
@@ -180,7 +180,7 @@
 
   <section class="slide" id="s4" data-title="CausalChapter">
     <div class="canvas">
-      <div class="topline"><div class="eyebrow">CausalChapter · Method</div><div class="counter">04 / 10</div></div>
+      <div class="topline"><div class="eyebrow">CausalChapter · Method</div><div class="counter">04 / 11</div></div>
       <h2>用“干预后的预测变化”衡量真正有用的时序依赖</h2>
       <div class="fig-wide">
         <div class="figure-wrap" data-zoom>
@@ -199,7 +199,7 @@
 
   <section class="slide" id="s5" data-title="面壁：知识 Agent">
     <div class="canvas">
-      <div class="topline"><div class="eyebrow">ModelBest · AI4Science Agent</div><div class="counter">05 / 10</div></div>
+      <div class="topline"><div class="eyebrow">ModelBest · AI4Science Agent</div><div class="counter">05 / 11</div></div>
       <h2>比“检索一段文本”更进一步：让知识本身具有层次结构</h2>
       <div class="two-col visual-left">
         <div class="figure-wrap" data-zoom><img src="assets/modelbest-knowledge-tree.png" alt="知识结构化 Agent 生成示意图" /></div>
@@ -219,7 +219,7 @@
 
   <section class="slide" id="s6" data-title="字节：训练闭环">
     <div class="canvas">
-      <div class="topline"><div class="eyebrow">ByteDance CQC · Training Loop</div><div class="counter">06 / 10</div></div>
+      <div class="topline"><div class="eyebrow">ByteDance CQC · Training Loop</div><div class="counter">06 / 11</div></div>
       <h2>训练退化不是数据不够，而是同一风险域内部仍然高度异质</h2>
       <div class="two-col visual-left">
         <div class="figure-wrap" data-zoom><img src="assets/bytedance-auto-cluster.png" alt="多模态自动聚类与分群训练流程生成示意图" /></div>
@@ -236,9 +236,33 @@
     </div>
   </section>
 
-  <section class="slide" id="s7" data-title="蚂蚁：策略适应">
+  <section class="slide" id="s7" data-title="ICLR：任务协同">
     <div class="canvas">
-      <div class="topline"><div class="eyebrow">Ant Group · SingGuard</div><div class="counter">07 / 10</div></div>
+      <div class="topline"><div class="eyebrow">ICLR 2026 · CurvSeg</div><div class="counter">07 / 11</div></div>
+      <h2 style="font-size:clamp(30px,2.65vw,48px);margin-bottom:12px">分类需要时间不变性，定位需要时间敏感性——冲突的任务也能形成闭环</h2>
+      <div class="two-col visual-left" style="gap:44px">
+        <div class="figure-wrap" data-zoom>
+          <img src="assets/curvseg-overview.png" alt="CurvSeg 曲率引导任务协同方法主图" />
+          <div class="hotspot" data-label="EDD：双专家提取分类与定位特定表示" style="left:0%;top:0%;width:34%;height:88%"></div>
+          <div class="hotspot" data-label="CGS：曲率信号与边界预测双向协同" style="left:56%;top:0%;width:44%;height:88%"></div>
+        </div>
+        <div>
+          <p>骨骼时序动作分割同时依赖动作分类与边界定位。传统解耦结构缓解了特征冲突，却形成信息孤岛，切断了两个任务天然互补的语义。</p>
+          <div class="challenge-list" style="gap:7px;margin-top:10px">
+            <div class="challenge" style="padding:10px 0"><strong>Expert-Driven Decoupling</strong><span>分类专家保留语义稳定性，定位专家关注细粒度时间变化。</span></div>
+            <div class="challenge" style="padding:10px 0"><strong>Curvature-Guided Synergy</strong><span>段内高曲率、转折处低曲率；曲率谷值指导边界，定位结果反向塑造分类空间。</span></div>
+            <div class="challenge" style="padding:10px 0"><strong>可插拔任务协同</strong><span>在 DeST、LaSA 等骨干上恢复跨任务信息流，而非简单共享同一表示。</span></div>
+          </div>
+          <div class="metric-row" style="margin-top:12px"><div class="metric"><b>63.6 → 65.5</b><span>PKU-MMD X-sub，F1@50 +1.9</span></div><div class="metric"><b>共同一作</b><span>学生一作 · ICLR 2026</span></div></div>
+        </div>
+      </div>
+      <div class="footer"><a href="assets/CurvSeg_ICLR2026.pdf" target="_blank">打开 ICLR 正式论文 ↗</a><a href="https://openreview.net/forum?id=Vgh30npuN3" target="_blank">OpenReview ↗</a></div>
+    </div>
+  </section>
+
+  <section class="slide" id="s8" data-title="蚂蚁：策略适应">
+    <div class="canvas">
+      <div class="topline"><div class="eyebrow">Ant Group · SingGuard</div><div class="counter">08 / 11</div></div>
       <div class="two-col">
         <div>
           <h2>安全边界会随业务、地域与产品阶段变化</h2>
@@ -254,9 +278,9 @@
     </div>
   </section>
 
-  <section class="slide" id="s8" data-title="动态规则 Agent">
+  <section class="slide" id="s9" data-title="动态规则 Agent">
     <div class="canvas">
-      <div class="topline"><div class="eyebrow">Dynamic Rule Agent · Contribution</div><div class="counter">08 / 10</div></div>
+      <div class="topline"><div class="eyebrow">Dynamic Rule Agent · Contribution</div><div class="counter">09 / 11</div></div>
       <h2>我的工作：自动构造“策略改变 → 标签随之改变”的训练闭环</h2>
       <div class="two-col visual-left">
         <div class="figure-wrap" data-zoom><img src="assets/singguard-dynamic-pipeline.png" alt="SingGuard 策略条件数据构建与训练流程" /></div>
@@ -276,9 +300,9 @@
     </div>
   </section>
 
-  <section class="slide" id="s9" data-title="研究组合">
+  <section class="slide" id="s10" data-title="研究组合">
     <div class="canvas">
-      <div class="topline"><div class="eyebrow">Research Portfolio</div><div class="counter">09 / 10</div></div>
+      <div class="topline"><div class="eyebrow">Research Portfolio</div><div class="counter">10 / 11</div></div>
       <div class="paper-grid">
         <div>
           <h2>研究问题在变，方法论始终一致</h2>
@@ -302,9 +326,9 @@
     </div>
   </section>
 
-  <section class="slide dark" id="s10" data-title="总结">
+  <section class="slide dark" id="s11" data-title="总结">
     <div class="canvas">
-      <div class="topline"><div class="eyebrow">One Consistent Direction</div><div class="counter">10 / 10</div></div>
+      <div class="topline"><div class="eyebrow">One Consistent Direction</div><div class="counter">11 / 11</div></div>
       <h2>我希望构建的 Agent，不只会回答问题，而是能理解环境、组织证据并适应目标</h2>
       <div class="synthesis">
         <article class="syn"><b>Understand</b><p>从长程多模态输入中恢复时间结构与高层语义。</p><span class="project">CausalChapter</span></article>
