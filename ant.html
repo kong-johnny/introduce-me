@@ -1,25 +1,41 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>蚂蚁 V3 合训｜多模态能力蒸馏</title><meta name="description" content="蚂蚁 V3 多模态基模合训：对抗 OCR、细粒度感知和富文本能力的数据构建与 MOPD 蒸馏。"><link rel="stylesheet" href="styles.css"></head>
-<body class="detail-page"><div class="progress" id="progress"></div><header class="detail-header"><a class="brand" href="index.html">XINRAN DUAN <span>/ 返回总览</span></a><nav><a href="#business">业务</a><a href="#pipeline">合训</a><a href="#reports">公开报告</a><a href="#case">Case</a></nav></header>
-<main class="detail-main">
-  <section class="detail-hero"><div><div class="kicker">ANT GROUP · MULTIMODAL FOUNDATION MODEL V3</div><h1>不是再做一个高级模型，<br>而是把高级能力<span style="color:var(--orange)">稳定做进基模</span>。</h1><p class="detail-lead">我参与 V3 版统一合训，重点把对抗 OCR、细粒度感知与富文本理解等前沿探索能力，通过批量数据构造和 MOPD 蒸馏迁移到基础模型。</p></div><div class="hero-facts"><div class="fact"><b>3 类高级能力</b><span>对抗 OCR · 细粒度感知 · 富文本</span></div><div class="fact"><b>Data → MOPD</b><span>先规模化造数，再进行多教师在线蒸馏</span></div><div class="fact"><b>统一基模</b><span>兼顾能力覆盖、吞吐、成本和持续迭代</span></div></div></section>
-  <section class="detail-section" id="business"><h2>业务理解：单点 SOTA 不等于线上可用</h2><p class="intro">高级模型适合探索能力上限，但大规模内容安全需要统一模型承担稳定吞吐。真正的问题是：如何保留专家能力，同时避免多域混训造成能力互相稀释、训练不稳定和迭代耦合。</p><div class="capability-grid"><article class="capability"><h3>对抗 OCR</h3><p>处理旋转、扭曲、遮挡、谐形与图文组合攻击，不只识别干净印刷文字。</p></article><article class="capability"><h3>细粒度感知</h3><p>关注局部区域、微小目标、属性与空间关系，降低“看见大概但答错细节”。</p></article><article class="capability"><h3>富文本理解</h3><p>保留表格、列表、公式、版式与跨区域对应关系，让识别结果可继续推理和审核。</p></article></div></section>
-  <section class="detail-section" id="pipeline"><h2>我的工作闭环：技术探索 → 批量造数 → MOPD → 基模回归</h2><div class="ant-flow"><article class="ant-stage"><span>01 / FRONTIER</span><h3>定义能力与难例</h3><p>把“高级模型更强”拆成可测的能力维度、失败模式和目标输出格式。</p></article><article class="ant-stage"><span>02 / DATA FACTORY</span><h3>规模化构造数据</h3><p>围绕攻击变体、局部细节和复杂版式批量生成样本，再经教师与规则过滤。</p></article><article class="ant-stage"><span>03 / MOPD</span><h3>多教师在线蒸馏</h3><p>学生在自己的 rollout 上生成，路由到对应专家获得逐 token 稠密监督。</p></article><article class="ant-stage"><span>04 / REGRESSION</span><h3>统一评测与回归</h3><p>同时检查专项能力、通用能力和安全边界，避免“一个能力涨、其他能力掉”。</p></article></div><div class="quote">关键价值：把分散、昂贵、难部署的专家能力，变成统一基础模型可持续继承和迭代的能力资产。</div></section>
-  <section class="detail-section" id="reports"><h2>公开技术参考：基模结构与 MOPD 能力整合</h2><p class="intro">以下截图来自公开技术报告，用于解释通用机制，不代表蚂蚁内部模型结构、数据规模或训练配置。</p><div class="case-panel"><figure class="figure-panel"><img src="assets/reports/mopd-pipeline.png" alt="MOPD 三阶段能力整合流程"><figcaption>MOPD 公开论文 Figure 1：共享 SFT 起点 → 独立领域教师 → 学生 rollout 上的多教师反向 KL 蒸馏。</figcaption></figure><div class="case-notes"><div class="case-note"><b>为什么不用静态 SFT 就结束？</b><p>静态教师答案与学生推理时分布不一致；on-policy 让训练直接覆盖学生会走到的状态。</p></div><div class="case-note"><b>为什么适合多能力合训？</b><p>不同专家可以并行开发，再按任务路由整合，减少多域直接混训的相互干扰。</p></div><div class="case-note"><b>监督为什么更密？</b><p>教师在每个 token 上提供分布信息，比只有最终成败的序列级奖励更细。</p></div></div></div>
-    <div class="case-panel" style="margin-top:28px"><figure class="figure-panel"><img src="assets/reports/qwen3vl-framework.png" alt="Qwen3-VL 公开技术报告框架图"><figcaption>Qwen3-VL 技术报告 Figure 1：原生分辨率视觉编码器、DeepStack 与语言模型共同构成多模态基模。</figcaption></figure><div class="case-notes"><div class="case-note"><b>基模不是纯语言模型外挂 OCR</b><p>视觉 token 的分辨率、层级特征注入和跨模态对齐，会共同决定 OCR 与细粒度感知上限。</p></div><div class="case-note"><b>公开报告的共同趋势</b><p>大量合成与筛选数据、强到弱蒸馏、专项能力训练，再回到统一模型评测。</p></div><div class="case-note"><b>我的关注点</b><p>不是复述架构，而是把高级能力转成可规模化的数据与训练信号。</p></div></div></div>
-    <figure class="figure-panel"><img src="assets/reports/qwen3vl-ocr.png" alt="Qwen3-VL 多语言 OCR 公开评测图"><figcaption>Qwen3-VL 技术报告 Figure 2：公开多语言 OCR 结果。这里用于说明 OCR 专项能力需要数据覆盖、视觉表征和后训练共同支撑。</figcaption></figure>
-    <div class="source-links"><a href="https://arxiv.org/abs/2606.30406" target="_blank">MOPD 论文</a><a href="https://arxiv.org/abs/2511.21631" target="_blank">Qwen3-VL 技术报告</a><a href="https://arxiv.org/abs/2601.02780" target="_blank">MiMo-V2-Flash 技术报告</a></div>
-  </section>
-  <section class="detail-section" id="case"><h2>合成 Case：复杂富文本中的对抗 OCR 与局部细节</h2><p class="intro">下面是用于说明能力链路的公开展示型合成案例，不含任何内部数据。</p><div class="synthetic-case"><div class="mock-doc"><div class="stamp">PAID</div><h3>INVOICE / 发票</h3><table><tr><td>Merchant</td><td>Northwind Lab</td></tr><tr><td>Serial No.</td><td><span class="adversarial-text">A8-5Z7-0I</span></td></tr><tr><td>Item</td><td>Vision Sensor × 2</td></tr><tr><td>Subtotal</td><td>¥ 3,980.00</td></tr><tr><td>Tax</td><td>¥ 238.80</td></tr><tr><td>Total</td><td><b>¥ 4,218.80</b></td></tr></table><p style="margin-top:22px;font-size:12px;color:#756b5c">任务：读取倾斜序列号，区分 Z/2、I/1，并保留表格与金额层级。</p></div><div class="case-output"><div class="output-card bad"><b>基础模型 / 蒸馏前</b><code>Serial: A8-527-01
-Total: ¥3,980.00
-（混淆字符，并把小计当成总额）</code></div><div class="output-card"><b>专项教师信号</b><code>OCR teacher → A8-5Z7-0I
-Fine-grained teacher → 定位 Serial 行与 PAID 印章
-Rich-text teacher → 恢复 Subtotal / Tax / Total 层级</code></div><div class="output-card good"><b>统一基模 / 能力蒸馏后</b><code>{
-  "serial": "A8-5Z7-0I",
-  "subtotal": 3980.00,
-  "tax": 238.80,
-  "total": 4218.80,
-  "status": "PAID"
-}</code></div></div></div><p class="disclaimer">Case 为网页合成示例，展示能力拆解和训练目标，不对应内部样本或实际模型输出。</p></section>
-  <section class="detail-section"><h2>与上一阶段工作的衔接</h2><div class="logic-grid"><article class="logic-card"><span>V2 / POLICY</span><h3>动态规则 Agent</h3><p>规则增删改写与 Teacher-Verifier 闭环，解决“策略变化后标签也要变化”。</p></article><article class="logic-card"><span>V3 / CAPABILITY</span><h3>统一基模合训</h3><p>进一步解决“前沿专项能力怎样进入主模型并保持通用能力”。</p></article><article class="logic-card"><span>BUSINESS</span><h3>从规则适应到能力资产化</h3><p>我对安全大模型的理解从数据规则层，延伸到模型能力整合与持续迭代层。</p></article></div></section>
-  <div class="next-page"><a href="index.html#work">← 返回两页总览</a><a href="emnlp.html">重新从 CausalChapter 开始 →</a></div>
-</main><script src="site.js"></script></body></html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>安全多模态统一模型｜段欣然</title>
+  <meta name="description" content="安全多模态统一模型的业务指令数据、视觉监督补充与白样本误打扰治理。">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="detail-page ant-project-page">
+  <div class="progress" id="progress"></div>
+  <header class="detail-header"><a class="brand" href="index.html">XINRAN DUAN <span>/ 返回总览</span></a><nav><a href="#framework">训练框架</a><a href="#instruction">业务指令</a><a href="#caption">视觉监督</a><a href="#calibration">事实校准</a><a href="#outlook">总结</a></nav></header>
+  <main class="detail-main">
+    <section class="detail-hero ant-hero">
+      <div><div class="kicker">ANT GROUP · SAFETY MULTIMODAL MODEL</div><h1>让同一模型理解多类规则，<br>也<span>看清决定结论的事实</span>。</h1><p class="detail-lead">内容安全需要面对不同风险域、不断变化的审核规则和多样化的用户图像。项目以分阶段训练形成统一模型，再用线上误判样本持续校准。这里围绕业务指令数据、视觉监督与白样本打扰治理，展示训练迭代链路。</p></div>
+      <div class="ant-hero-aside"><div><small>BUSINESS INSTRUCTION</small><strong>规则判断</strong><span>让结论随审核口径变化</span></div><div><small>VISUAL SUPERVISION</small><strong>视觉事实</strong><span>覆盖局部对象、属性和关系</span></div><div><small>FACTUAL CALIBRATION</small><strong>白样本纠错</strong><span>减少无依据的过度拦截</span></div></div>
+    </section>
+    <section class="detail-section" id="framework">
+      <div class="ant-section-head"><span>01 / PROJECT FRAMEWORK</span><h2>统一模型的训练与迭代</h2><p>先恢复通用能力并注入安全知识，再混合业务与视觉监督；专项教师提供能力参考，模型上线后的错误样本进入事实性校准。</p></div>
+      <div class="ant-architecture" role="img" aria-label="基座模型经过安全知识训练、业务 SFT、专家能力融合和事实性校准，形成安全统一模型并进入评测回流"><div class="ant-arch-track"><div class="ant-arch-node muted"><small>BASE · S1 · S2</small><b>基础能力准备</b><span>基座、对齐与安全知识</span></div><div class="ant-arch-node main"><small>S4 · SFT</small><b>业务数据混合训练</b><span>规则判断 + 视觉事实</span></div><div class="ant-arch-node"><small>S5 · MOPD</small><b>专项能力融合</b><span>多专家能力进入统一模型</span></div><div class="ant-arch-node main warm"><small>S6 · CALIBRATION</small><b>多模态事实校准</b><span>针对白样本误判持续优化</span></div><div class="ant-arch-node dark"><small>OUTPUT</small><b>安全统一模型</b><span>评测、部署与问题回流</span></div></div><div class="ant-arch-support"><b>S3 · 专项专家能力</b><span>细粒度感知、视频理解、对抗 OCR 等方向提供专家参考与教师分布</span></div></div>
+      <p class="ant-framework-note">这条链路中的两个关键缺口很具体：业务指令通常只监督审核结论涉及的少量视觉线索；部署后遇到自然生活图像，模型也可能把普通事实过度关联到风险规则。</p>
+    </section>
+    <section class="detail-section" id="instruction">
+      <div class="ant-section-head"><span>02 / BUSINESS INSTRUCTION DATA</span><h2>业务指令数据：同一素材适应不同审核规则</h2><p>以短剧为例，圈选与规则相关的视频片段，整理视频帧和语音文本，再围绕同一素材构造不同规则边界与审核推理。</p></div>
+      <div class="ant-method-row"><div class="ant-method-steps"><div><i>01</i><b>自动圈选</b><span>用规则与图像、视频的语义相似度筛选相关素材</span></div><div><i>02</i><b>动态规则</b><span>同一内容对应不同审核口径，结论由规则条件决定</span></div><div><i>03</i><b>推理校验</b><span>生成快慢思考样本，检查视觉证据、规则和结论是否一致</span></div><div><i>04</i><b>进入 SFT</b><span>将规则、素材与回答整理为可训练的多模态业务指令</span></div></div><div class="ant-method-result"><small>训练目标</small><strong>看懂内容，再依当前规则作答</strong><p>模型不只记住固定标签，而是学习“内容事实如何满足或不满足当前规则”。</p></div></div>
+    </section>
+    <section class="detail-section" id="caption">
+      <div class="ant-section-head"><span>03 / DENSE VISUAL SUPERVISION</span><h2>业务视觉监督：补足规则问答看不到的细节</h2><p>动态规则的业务指令数据侧重判断依据，但一条问答往往只触及画面中的少数对象。Dense Caption 在同一 SFT 阶段补充对象、属性、文字与关系的视觉监督。</p></div>
+      <div class="ant-supervision-pair"><div><small>业务指令数据</small><b>监督“怎样按规则判断”</b><p>同一图像在不同规则下可能产生不同结论，训练模型遵循当前审核口径。</p></div><span class="ant-plus">+</span><div><small>Dense Caption</small><b>监督“画面究竟有什么”</b><p>对原图及局部区域提取细粒度事实，降低只关注主体与显眼线索的倾向。</p></div></div>
+      <div class="ant-caption-method"><div class="ant-caption-schematic" aria-label="全图描述与局部描述汇总为密集视觉监督，再进入业务 SFT"><div class="ant-caption-source"><span>已有圈选素材</span><b>图像 / 视频帧</b></div><div class="ant-caption-branches"><div><small>GLOBAL</small><b>全图描述</b><span>场景与主要动作</span></div><div><small>LOCAL</small><b>局部描述</b><span>上下文区域 + 目标 Mask</span></div></div><div class="ant-caption-fusion"><span>来源核验与汇总</span><b>密集视觉监督</b><small>与业务指令共同进入 SFT</small></div></div><div class="ant-caption-notes"><h3>局部描述的三个设计</h3><div><b>上下文扩展</b><p>小目标的紧框容易裁掉判别线索；适度保留周围情景有助于识别。</p></div><div><b>关联区域组合</b><p>相近物体可以共同描述，保留交互关系并减少重复推理。</p></div><div><b>Mask 指代</b><p>同时输入原图与目标 Mask，明确局部 Caption 应描述哪个对象。</p></div></div></div>
+      <p class="ant-outcome">观察到的结果是，局部视觉监督可改善细粒度感知，并在多域业务数据混合训练中维持增量收益；具体收益取决于任务与数据配比。</p>
+    </section>
+    <section class="detail-section" id="calibration">
+      <div class="ant-section-head"><span>04 / FALSE-POSITIVE CALIBRATION</span><h2>线上白样本：从误判轨迹找到纠错信号</h2><p>上线场景包含大量自然生活图像，与审核训练数据的分布不同。模型有时识别了画面，却在关联规则或后续推理中补出了不存在的风险证据。</p></div>
+      <div class="ant-error-types"><article><b>视觉事实偏差</b><p>把真实属性误读为遮挡或异常区域。</p></article><article><b>概念关联偏差</b><p>把普通视觉符号牵连到无依据的敏感概念。</p></article><article><b>规则推理偏差</b><p>对象身份与规则范围都已识别，结论仍不一致。</p></article></div>
+      <div class="ant-rubric-flow"><div><small>01 · 扫描归因</small><b>定位错误环节</b><p>保留样本、模型轨迹与真实图像证据。</p></div><div><small>02 · 样本级 Rubric</small><b>写出必要判据</b><p>区分可见事实、规则触发条件和无依据推断。</p></div><div><small>03 · 联合评审</small><b>比较多条轨迹</b><p>引入固定正确参照，依据错误证据延迟更新 Rubric。</p></div><div><small>04 · 训练回归</small><b>校准并复测</b><p>检查白样本打扰，也持续观察风险召回。</p></div></div>
+      <p class="ant-outcome">小规模验证中，针对性样本上的误打扰明显下降；真实业务准召还需要持续回归，因此这里不把局部验证当作全量上线结论。</p>
+    </section>
+    <section class="detail-section" id="outlook"><div class="ant-section-head"><span>05 / TAKEAWAY</span><h2>从训练监督到上线反馈</h2></div><div class="ant-endnote"><p>业务指令数据让模型学会依据动态规则判断；密集视觉描述让它在判断前获取更完整的画面事实；事实性校准则把上线白样本误判转成可训练的纠错信号。三者服务于同一个目标：让统一模型在多业务场景中更准确、更稳定。</p><div><b>后续方向</b><span>多域数据配比 · 视觉覆盖与业务收益边界 · Rubric 的可靠性与泛化</span></div></div></section>
+    <div class="next-page"><a href="index.html#work">← 返回项目总览</a><a href="emnlp.html">查看 CausalChapter →</a></div>
+  </main><script src="site.js"></script>
+</body></html>
